@@ -168,7 +168,7 @@ def prepare_EEPROM(fsEeprom, memoEEPROM):
             window_prepa_meta['-output-'].update(strSalida)
 
         if event == "-metaprepabutton-":
-            fsEeprom.metaPrepare()
+            fsEeprom.meta_prepare()
             window_prepa_meta['-output-'].update(
                 "Espacio de metadatos preparado")
 

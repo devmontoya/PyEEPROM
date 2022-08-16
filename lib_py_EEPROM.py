@@ -140,7 +140,7 @@ class FileSystem:
                 return self.memory.read_block(add[1], sizeBytes).decode()
         raise Exception("This address is not metadata")
 
-    def metaPrepare(self):
+    def meta_prepare(self):
         """Prepara el espacio de metadatos, eliminando previos archivos si es el caso"""
         possiList = [
             self.rootByteValue + i*16 for i in range(self.maxNFiles)]
