@@ -6,11 +6,15 @@ from typing import Tuple
 
 
 class MappingBlock:
+    """Abstracción de la metadata de un archivo en memoria"""
+
     def __init__(self, address: int, size: int, name: str) -> None:
         self.address = address
         self.size = size
         if len(name) > 12:
             raise Exception("'name' should not exceed 12 bytes")
+        elif not all([32 >= ord(letter) < 127 for letter in name]):
+            raise Exception("'name' contains non ascii characters")
         self.name = name
 
     def data_block(self) -> bytearray:
@@ -100,7 +104,7 @@ class FileSystem:
         """Entrega la primer ubicación disponible para escribir la metadata
         de un nuevo archivo"""
         possiList = [
-            self.rootByteValue + i*16 for i in range(self.maxNFiles)]
+            self.rootByteValue + i * 16 for i in range(self.maxNFiles)]
         metaAdress = [i[0] for i in self.list_files()]  # Current list of files
         for add in possiList:
             if add not in metaAdress:
@@ -126,7 +130,7 @@ class FileSystem:
 
     def del_file(self, address: int) -> None:
         possiList = [
-            self.rootByteValue + i*16 for i in range(self.maxNFiles)]
+            self.rootByteValue + i * 16 for i in range(self.maxNFiles)]
         if address in possiList:
             self.memory.write(address, bytes(1))
         else:
@@ -143,7 +147,7 @@ class FileSystem:
     def meta_prepare(self):
         """Prepara el espacio de metadatos, eliminando previos archivos si es el caso"""
         possiList = [
-            self.rootByteValue + i*16 for i in range(self.maxNFiles)]
+            self.rootByteValue + i * 16 for i in range(self.maxNFiles)]
         for add in possiList:
             self.memory.write(add, bytes(1))
 
@@ -180,4 +184,25 @@ class MemoryEEPROM:
             time.sleep(0.03)
 
     def read_all(self) -> bytearray:
+        return self.memory
+
+
+class Memory:
+    """Simula el comportamiento de la memoria EEPROM mediante un array"""
+
+    def __init__(self):
+        self.capacity = 1024
+        self.memory = bytearray(self.capacity)
+
+    def read(self, address):
+        return self.memory[address]
+
+    def readBlock(self, address, size):
+        return self.memory[address: address + size]
+
+    def write(self, address, data):
+        for i in range(len(data)):
+            self.memory[address + i] = data[i]
+
+    def readAll(self):
         return self.memory

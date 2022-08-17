@@ -3,7 +3,7 @@ import time
 import serial
 import PySimpleGUI as sg
 
-from lib_py_EEPROM import *
+from lib_pyEEPROM import *
 
 
 def main() -> None:
@@ -42,9 +42,11 @@ def read_del_file(fsEeprom) -> None:
               [sg.Multiline(size=(80, 9), key='-filelist-')],
               [sg.Button("Obtener lista", key="-getlist-")],
               [sg.Text("_________________________", size=(80, 1))],
-              [sg.Text("¿Qué Archivo desea leer o borrar? Introduzca su ID", size=(80, 1))],
+              [sg.Text(
+                  "¿Qué Archivo desea leer o borrar? Introduzca su ID", size=(80, 1))],
               [sg.Input(key="-IDfile-")],
-              [[sg.Button("Obtener", key="-getfile-"), sg.Button("Borrar", key="-delfile-")]],
+              [[sg.Button("Obtener", key="-getfile-"),
+                sg.Button("Borrar", key="-delfile-")]],
               [sg.Multiline(size=(80, 6), key='-datafile-')],
               [sg.Button('Exit')]]
     window_readDelFile = sg.Window(
@@ -125,7 +127,11 @@ def new_file(fsEeprom) -> None:
                     window_newFile['-output-'].update("Nombre demasiado largo")
                 elif len(dataFile) == 0 or len(nameFile) == 0:
                     window_newFile['-output-'].update(
-                        "Datos introducidos inválidos")
+                        "No se introdujo la información requerida")
+                if not all([32 >= ord(letter) < 127 for letter in nameFile]) and not all([32 >= ord(letter) < 127 for letter in dataFile]):
+                    window_newFile['-output-'].update(
+                        "Los datos introducidos incluyen caracteres no ascii")
+                    continue
                 else:
                     fsEeprom.new_file(nameFile, dataFile)
                     window_newFile['-output-'].update(
