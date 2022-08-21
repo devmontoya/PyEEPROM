@@ -9,3 +9,14 @@ Aunque su gran desventaja es que tienen una muy baja capacidad (en el orden de K
 ### ¿Por qué usar este programa?
 
 La memoria EEPROM no tiene la habilidad de asignar la información entrante en su interior, su escritura y lectura se realiza de manera directa, de forma cercana al uso de un array, por tanto, este programa se encarga de realizar las asignaciones, borrado y listado de los datos usando una GUI. Además, en caso de no disponer de la GUI los datos escritos son fácilmente legibles por un humano, reduciendo la probabilidad de perdida de datos debida por ejemplo a la corrupción de un sistema de archivo común, como ocurre en el caso de usar memorias USB.
+
+## Esquema del montaje
+
+En este caso particular se emplea una memoria EEPROM Atmel AT24C32
+
+### Montaje
+
+![Montaje](./Montaje/Imagen-montaje.png)
+
+### Esquema
+![Diagrama](./Montaje/Diagrama-montaje.png)
